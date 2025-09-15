@@ -1,15 +1,17 @@
 package com.plm.poelman.java_api.security;
 
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
 
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+
+import org.springframework.stereotype.Component;
+
 @Component
-public class PasswordHasher {
+public class PasswordUtils {
+
     private static final int SALT_LENGTH = 16; // 128-bit salt
     private static final int ITERATIONS = 210_000; // modern baseline
     private static final int KEY_LENGTH = 256; // bits
@@ -30,4 +32,5 @@ public class PasswordHasher {
             throw new IllegalStateException("Error hashing password", e);
         }
     }
+
 }
