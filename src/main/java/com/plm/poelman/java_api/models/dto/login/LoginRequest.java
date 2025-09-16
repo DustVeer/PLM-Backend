@@ -1,4 +1,4 @@
-package com.plm.poelman.java_api.controllers.dto.login;
+package com.plm.poelman.java_api.models.dto.login;
 
 public class LoginRequest {
 

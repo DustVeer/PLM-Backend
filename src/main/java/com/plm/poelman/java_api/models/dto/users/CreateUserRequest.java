@@ -1,6 +1,7 @@
-package com.plm.poelman.java_api.controllers.dto.users;
+package com.plm.poelman.java_api.models.dto.users;
 
 public class CreateUserRequest {
+
     private String name;
     private String email;
     private String password;

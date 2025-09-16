@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.plm.poelman.java_api.controllers.dto.users.CreateUserRequest;
-import com.plm.poelman.java_api.controllers.dto.users.UserResponse;
 import com.plm.poelman.java_api.models.User;
+import com.plm.poelman.java_api.models.dto.users.CreateUserRequest;
+import com.plm.poelman.java_api.models.dto.users.UserResponse;
 import com.plm.poelman.java_api.repositories.UserRepository;
 import com.plm.poelman.java_api.security.PasswordUtils;
 
@@ -92,12 +92,11 @@ public class UserController {
     @GetMapping("/by-email")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
         return _UserRepository.findByEmail(email)
-                .map(user -> ResponseEntity.ok(
-                new UserResponse(
-                        user.getId(),
-                        user.getEmail(),
-                        user.getCreatedAt()
-                )))
-                .orElse(ResponseEntity.notFound().build());
+                .map(user -> new UserResponse(
+                user.getId(),
+                user.getEmail(),
+                user.getCreatedAt()))
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
