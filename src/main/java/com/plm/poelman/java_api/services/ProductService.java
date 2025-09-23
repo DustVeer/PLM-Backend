@@ -37,7 +37,8 @@ public class ProductService {
         return _productRepository.findById(id)
                 .map(product -> {
                     ProductCategory category = _categoryRepository.findById(product.getCategoryId()).orElse(null);
-                    User createdBy = _userRepository.findById(product.getCreatedBy()).orElse(null);
+                    UserResponse createdBy = new UserResponse(
+                            _userRepository.findById(product.getCreatedBy()).orElse(null));
                     ProductStatus status = _statusRepository.findById(product.getStatusId()).orElse(null);
 
                     return new ProductResponse(product, category, createdBy, status);
@@ -50,7 +51,8 @@ public class ProductService {
         return _productRepository.findAll().stream()
                 .map(product -> {
                     ProductCategory category = _categoryRepository.findById(product.getCategoryId()).orElse(null);
-                    User createdBy = _userRepository.findById(product.getCreatedBy()).orElse(null);
+                    UserResponse createdBy = new UserResponse(
+                            _userRepository.findById(product.getCreatedBy()).orElse(null));
                     ProductStatus status = _statusRepository.findById(product.getStatusId()).orElse(null);
 
                     return new ProductResponse(product, category, createdBy, status);

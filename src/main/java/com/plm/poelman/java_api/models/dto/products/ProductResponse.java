@@ -6,6 +6,8 @@ import com.plm.poelman.java_api.models.Product;
 import com.plm.poelman.java_api.models.ProductCategory;
 import com.plm.poelman.java_api.models.ProductStatus;
 import com.plm.poelman.java_api.models.User;
+import com.plm.poelman.java_api.models.dto.*;
+import com.plm.poelman.java_api.models.dto.users.UserResponse;
 
 public class ProductResponse {
 
@@ -14,13 +16,14 @@ public class ProductResponse {
     private String description;
 
     private ProductCategory productCategory;
-    private User createdBy;
+    private UserResponse createdBy;
     private ProductStatus productStatus;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public ProductResponse(Product product, ProductCategory productCategory, User createdBy, ProductStatus productStatus) {
+    public ProductResponse(Product product, ProductCategory productCategory, UserResponse createdBy,
+            ProductStatus productStatus) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();

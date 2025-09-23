@@ -2,13 +2,18 @@ package com.plm.poelman.java_api.models.dto.users;
 
 import java.time.LocalDateTime;
 
+import com.plm.poelman.java_api.models.User;
+
 public class UserResponse {
 
     private Long id;
     private String email;
     private LocalDateTime createdAt;
 
-    public UserResponse() {
+    public UserResponse(User user) {
+        this.id = user.getId();
+        this.email = user.getEmail();
+        this.createdAt = user.getCreatedAt();
     }
 
     public UserResponse(Long id, String email, LocalDateTime createdAt) {
