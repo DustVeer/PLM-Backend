@@ -1,14 +1,18 @@
 package com.plm.poelman.java_api.services;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.plm.poelman.java_api.models.Product;
 import com.plm.poelman.java_api.models.ProductCategory;
 import com.plm.poelman.java_api.models.ProductStatus;
-import com.plm.poelman.java_api.models.User;
+import com.plm.poelman.java_api.models.dto.users.UserResponse;
 import com.plm.poelman.java_api.models.dto.products.ProductResponse;
+import com.plm.poelman.java_api.models.dto.products.UpdateProductRequest;
 import com.plm.poelman.java_api.repositories.ProductCategoryRepository;
 import com.plm.poelman.java_api.repositories.ProductRepository;
 import com.plm.poelman.java_api.repositories.ProductStatusRepository;
@@ -30,6 +34,27 @@ public class ProductService {
         this._categoryRepository = categoryRepository;
         this._userRepository = userRepository;
         this._statusRepository = statusRepository;
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean existsById(Long id) {
+        return _productRepository.existsById(id);
+    }
+
+    @Transactional
+    public Product updateProduct(Long id, UpdateProductRequest req) {
+
+        LocalDateTime now = LocalDateTime.now();
+        Product product = new Product();
+        product.setId(id);
+        product.setName(req.getName());
+        product.setDescription(req.getDescription());
+        product.setCreatedBy(_productRepository.findById(id).orElse(null).getCreatedBy());
+        product.setCategoryId(req.getProductCategoryId());
+        product.setStatusId(req.getProductStatusId());
+        product.setUpdatedAt(now);
+
+        return _productRepository.save(product);
     }
 
     @Transactional(readOnly = true)
@@ -59,4 +84,6 @@ public class ProductService {
                 }).toList();
 
     }
+
+    
 }

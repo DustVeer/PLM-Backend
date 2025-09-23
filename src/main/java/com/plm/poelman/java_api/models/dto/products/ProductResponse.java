@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import com.plm.poelman.java_api.models.Product;
 import com.plm.poelman.java_api.models.ProductCategory;
 import com.plm.poelman.java_api.models.ProductStatus;
-import com.plm.poelman.java_api.models.User;
-import com.plm.poelman.java_api.models.dto.*;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
 
 public class ProductResponse {
@@ -66,11 +64,11 @@ public class ProductResponse {
         this.productCategory = productCategory;
     }
 
-    public User getCreatedBy() {
+    public UserResponse getCreatedBy() {
         return this.createdBy;
     }
 
-    public void setCreatedBy(User createdBy) {
+    public void setCreatedBy(UserResponse createdBy) {
         this.createdBy = createdBy;
     }
 
