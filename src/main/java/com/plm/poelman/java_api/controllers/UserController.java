@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import com.plm.poelman.java_api.models.dto.users.UserResponse;
 import com.plm.poelman.java_api.repositories.UserRepository;
 import com.plm.poelman.java_api.security.PasswordUtils;
 
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -70,21 +72,21 @@ public class UserController {
         u.setRoleId(roleId);
         User saved = _UserRepository.save(u);
 
-        UserResponse resp = new UserResponse(saved.getId(), saved.getEmail(), saved.getCreatedAt());
+        UserResponse resp = new UserResponse(saved.getId(), saved.getName(), saved.getEmail(), saved.getCreatedAt());
         return ResponseEntity.created(URI.create("/api/users/" + saved.getId())).body(resp);
     }
 
     @GetMapping
     public List<UserResponse> getUsers() {
         return _UserRepository.findAll().stream()
-                .map(u -> new UserResponse(u.getId(), u.getEmail(), u.getCreatedAt()))
+                .map(u -> new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getCreatedAt()))
                 .toList();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return _UserRepository.findById(id)
-                .map(u -> new UserResponse(u.getId(), u.getEmail(), u.getCreatedAt()))
+                .map(u -> new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getCreatedAt()))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -92,10 +94,11 @@ public class UserController {
     @GetMapping("/by-email")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
         return _UserRepository.findByEmail(email)
-                .map(user -> new UserResponse(
-                user.getId(),
-                user.getEmail(),
-                user.getCreatedAt()))
+                .map(u -> new UserResponse(
+                u.getId(),
+                u.getName(),
+                u.getEmail(),
+                u.getCreatedAt()))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

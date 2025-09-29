@@ -1,6 +1,5 @@
 package com.plm.poelman.java_api.services;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -78,8 +77,8 @@ public class ProductService {
         product.setName(req.getName());
         product.setDescription(req.getDescription());
         product.setCreatedBy(_productRepository.findById(id).orElse(null).getCreatedBy());
-        product.setCategoryId(req.getProductCategoryId());
-        product.setStatusId(req.getProductStatusId());
+        product.setCategoryId(req.getCategoryId());
+        product.setStatusId(req.getStatusId());
         product.setUpdatedAt(now);
 
         return _productRepository.save(product);

@@ -1,12 +1,11 @@
 package com.plm.poelman.java_api.controllers;
 
-import java.net.http.HttpResponse.ResponseInfo;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.catalina.connector.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +19,7 @@ import com.plm.poelman.java_api.models.dto.products.ProductResponse;
 import com.plm.poelman.java_api.models.dto.products.UpdateProductRequest;
 import com.plm.poelman.java_api.services.ProductService;
 
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("api/products")
 public class ProductController {
