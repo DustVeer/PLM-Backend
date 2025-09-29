@@ -1,0 +1,68 @@
+package com.plm.poelman.java_api.services;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import com.plm.poelman.java_api.models.User;
+import com.plm.poelman.java_api.models.dto.login.LoginRequest;
+import com.plm.poelman.java_api.models.dto.users.CreateUserRequest;
+import com.plm.poelman.java_api.repositories.UserRepository;
+import com.plm.poelman.java_api.security.PasswordUtils;
+import com.plm.poelman.java_api.models.dto.users.UserResponse;
+
+@Service
+public class UserService {
+    private final UserRepository _userRepository;
+    private final PasswordUtils _passwordUtils;
+
+    public UserService(UserRepository userRepository, PasswordUtils passwordUtils) {
+        this._userRepository = userRepository;
+        this._passwordUtils = passwordUtils;
+    }
+
+    public Optional<User> findByEmail(String email) {
+        return _userRepository.findByEmail(email);
+    }
+
+    public Optional<User> findById(Long id) {
+        return _userRepository.findById(id);
+    }
+
+    public User save(CreateUserRequest req) {
+
+        byte[] salt = _passwordUtils.generateSalt();
+        byte[] hash = _passwordUtils.hash(req.getPassword().toCharArray(), salt);
+
+        User user = new User();
+        user.setName(req.getName());
+        user.setEmail(req.getEmail());
+        user.setPasswordSalt(salt);
+        user.setPasswordHash(hash);
+        user.setRoleId(req.getRoleId());
+
+
+        return _userRepository.save(user);
+    }
+
+    public List<UserResponse> getAllUsersResponse() {
+        return _userRepository.findAll().stream()
+                .map(u -> new UserResponse(u.getId(), u.getName(), u.getEmail(), u.getCreatedAt()))
+                .toList();
+    } 
+
+    public Optional<User> Login(LoginRequest req) {
+        Optional<User> userOpt = _userRepository.findByEmail(req.getEmail());
+        if (userOpt.isEmpty()) {
+            return Optional.empty();
+        }
+        User user = userOpt.get();
+        byte[] hash = _passwordUtils.hash(req.getPassword().toCharArray(), user.getPasswordSalt());
+        if (!(hash == user.getPasswordHash())) {
+            return Optional.empty();
+        }
+        return Optional.of(user);
+    }
+
+}
