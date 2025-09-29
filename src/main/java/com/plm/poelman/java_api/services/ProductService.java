@@ -37,8 +37,36 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public boolean existsByCategoryId(Long categoryId) {
+        return _categoryRepository.existsById(categoryId);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByStatusId(Long statusId) {
+        return _statusRepository.existsById(statusId);
+    }
+
+    @Transactional(readOnly = true)
     public Boolean existsById(Long id) {
         return _productRepository.existsById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean existsByUserId(Long createdBy) {
+        return _userRepository.existsById(createdBy);
+    }
+
+    @Transactional
+    public Product createProduct(Product req) {
+        Product product = new Product();
+        product.setName(req.getName());
+        product.setDescription(req.getDescription());
+        product.setCategoryId(req.getCategoryId());
+        product.setStatusId(req.getStatusId());
+        product.setCreatedBy(req.getCreatedBy());
+
+        return _productRepository.save(product);
+        
     }
 
     @Transactional
@@ -85,5 +113,5 @@ public class ProductService {
 
     }
 
-    
+
 }
