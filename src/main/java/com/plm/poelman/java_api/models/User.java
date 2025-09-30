@@ -2,12 +2,7 @@ package com.plm.poelman.java_api.models;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Users", schema = "plm")
@@ -33,8 +28,9 @@ public class User {
     @Column(name = "CreatedAt", nullable = false, updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "RoleID", nullable = false)
-    private Integer roleId = 1;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "RoleID", nullable = false)
+    private UserRole role = new UserRole();
 
     public Long getId() {
         return id;
@@ -84,11 +80,11 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public int getRoleId() {
-        return roleId;
+    public UserRole getRole() {
+        return role;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 }

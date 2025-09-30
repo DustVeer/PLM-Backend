@@ -3,6 +3,7 @@ package com.plm.poelman.java_api.services;
 import java.util.List;
 import java.util.Optional;
 
+
 import org.springframework.stereotype.Service;
 
 import com.plm.poelman.java_api.models.User;
@@ -13,13 +14,16 @@ import com.plm.poelman.java_api.security.PasswordUtils;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
 
 @Service
-public class UserService {
+public class UserService  {
+
     private final UserRepository _userRepository;
+    private final UserRoleService _userRoleService;
     private final PasswordUtils _passwordUtils;
 
-    public UserService(UserRepository userRepository, PasswordUtils passwordUtils) {
+    public UserService(UserRepository userRepository, PasswordUtils passwordUtils, UserRoleService userRoleService) {
         this._userRepository = userRepository;
         this._passwordUtils = passwordUtils;
+        this._userRoleService = userRoleService;
     }
 
     public Optional<User> findByEmail(String email) {
@@ -40,7 +44,7 @@ public class UserService {
         user.setEmail(req.getEmail());
         user.setPasswordSalt(salt);
         user.setPasswordHash(hash);
-        user.setRoleId(req.getRoleId());
+        // user.setRoleId(req.getRoleId()); Change to new user role system later
 
 
         return _userRepository.save(user);
@@ -57,11 +61,18 @@ public class UserService {
         if (userOpt.isEmpty()) {
             return Optional.empty();
         }
+
         User user = userOpt.get();
-        byte[] hash = _passwordUtils.hash(req.getPassword().toCharArray(), user.getPasswordSalt());
-        if (!(hash == user.getPasswordHash())) {
-            return Optional.empty();
-        }
+
+        byte[] salt = user.getPasswordSalt();
+        byte[] expectedHash = _passwordUtils.hash(req.getPassword().toCharArray(), salt);
+
+        boolean ok = _passwordUtils.verify(req.getPassword().toCharArray(), salt, expectedHash);
+
+
+        if (!ok) return Optional.empty();
+        
+
         return Optional.of(user);
     }
 

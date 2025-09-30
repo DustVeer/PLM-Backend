@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.plm.poelman.java_api.models.User;
 import com.plm.poelman.java_api.models.dto.users.CreateUserRequest;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
-import com.plm.poelman.java_api.repositories.UserRepository;
-import com.plm.poelman.java_api.security.PasswordUtils;
+
 import com.plm.poelman.java_api.services.UserService;
 
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -86,7 +84,7 @@ public class UserController {
 
     @GetMapping("/by-email")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
-        return _UserRepository.findByEmail(email)
+        return _userService.findByEmail(email)
                 .map(u -> new UserResponse(
                 u.getId(),
                 u.getName(),
