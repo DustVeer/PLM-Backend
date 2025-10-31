@@ -19,7 +19,7 @@ public class JwtService {
     private final long ttlMinutes;
 
     public JwtService(
-            @Value("${security.jwt.secret}") String secret,
+            @Value("${security.jwt.secret-base64}") String secret,
             @Value("${security.jwt.issuer}") String issuer,
             @Value("${security.jwt.audience}") String audience,
             @Value("${security.jwt.access-ttl-min}") long ttlMinutes) {

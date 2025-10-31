@@ -6,7 +6,6 @@ import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +25,6 @@ import com.plm.poelman.java_api.services.UserService;
 public class UserController {
 
     private final UserService _userService;
-    
 
     public UserController(UserService userService) {
         this._userService = userService;
@@ -50,7 +48,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("password must be at least 8 characters");
         }
 
-       
         Optional<User> existing = _userService.findByEmail(email);
         if (existing.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("user with this email already exists");
@@ -65,7 +62,7 @@ public class UserController {
     @GetMapping
     public List<UserResponse> getUsers() {
         return _userService.getAllUsersResponse();
-                
+
     }
 
     @GetMapping("/{id}")
@@ -79,17 +76,17 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .findFirst()
                 .orElseGet(() -> ResponseEntity.notFound().build());
-                
+
     }
 
     @GetMapping("/by-email")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
         return _userService.findByEmail(email)
                 .map(u -> new UserResponse(
-                u.getId(),
-                u.getName(),
-                u.getEmail(),
-                u.getCreatedAt()))
+                        u.getId(),
+                        u.getName(),
+                        u.getEmail(),
+                        u.getCreatedAt()))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

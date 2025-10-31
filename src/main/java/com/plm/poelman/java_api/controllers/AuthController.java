@@ -3,7 +3,6 @@ package com.plm.poelman.java_api.controllers;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.plm.poelman.java_api.models.User;
 import com.plm.poelman.java_api.models.dto.login.LoginRequest;
 import com.plm.poelman.java_api.models.dto.login.LoginResponse;
-import com.plm.poelman.java_api.models.dto.users.UserResponse;
 import com.plm.poelman.java_api.security.JwtService;
 import com.plm.poelman.java_api.services.UserService;
 
@@ -42,10 +40,6 @@ public class AuthController {
 
         System.err.println("user logged in Role: " + user.getRole().getName());
         System.err.println("user logged in Email: " + user.getEmail());
-
-
-        UserResponse userResponse = new UserResponse(user);
-
 
         var roleName = user.getRole().getName();
 
