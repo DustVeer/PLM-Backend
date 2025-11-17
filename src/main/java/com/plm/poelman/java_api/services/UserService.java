@@ -65,13 +65,13 @@ public class UserService  {
         User user = userOpt.get();
 
         byte[] salt = user.getPasswordSalt();
-        byte[] expectedHash = _passwordUtils.hash(req.getPassword().toCharArray(), salt);
+
+        System.out.println("passwordReact:" + req.getPassword());
+        byte[] expectedHash = user.getPasswordHash();
 
         boolean ok = _passwordUtils.verify(req.getPassword().toCharArray(), salt, expectedHash);
 
-
         if (!ok) return Optional.empty();
-        
 
         return Optional.of(user);
     }

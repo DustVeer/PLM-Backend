@@ -1,4 +1,3 @@
-// security/JwtAuthFilter.java
 package com.plm.poelman.java_api.security;
 
 import io.jsonwebtoken.Claims;
@@ -34,8 +33,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         String method = request.getMethod();
-        return ("POST".equalsIgnoreCase(method) && "/api/auth/login".equals(path))
-                || "OPTIONS".equalsIgnoreCase(method);
+        // Skip auth for login and CORS preflight
+        return ("POST".equalsIgnoreCase(method) && "/api/auth/login".equals(path)) || "OPTIONS".equalsIgnoreCase(method);
     }
 
     @Override
@@ -48,6 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         System.out.println("[JWT] authHeader=" + header);
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             String token = header.substring(7);
+            System.out.println("token: " + token);
             try {
                 Jws<Claims> jws = jwtService.parse(token);
                 Claims claims = jws.getPayload();

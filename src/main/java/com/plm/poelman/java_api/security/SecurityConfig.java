@@ -1,5 +1,6 @@
-// security/SecurityConfig.java
 package com.plm.poelman.java_api.security;
+
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

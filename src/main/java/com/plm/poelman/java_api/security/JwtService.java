@@ -1,12 +1,18 @@
 package com.plm.poelman.java_api.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.security.MessageDigest;
 import java.time.Instant;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -23,34 +29,52 @@ public class JwtService {
             @Value("${security.jwt.issuer}") String issuer,
             @Value("${security.jwt.audience}") String audience,
             @Value("${security.jwt.access-ttl-min}") long ttlMinutes) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+
+        // Decode the SAME Base64 secret for both signing and verification
+        byte[] keyBytes = Decoders.BASE64.decode(secretBase64);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
+
         this.issuer = issuer;
         this.audience = audience;
         this.ttlMinutes = ttlMinutes;
     }
 
+    /** Build a signed JWT (HS256 inferred from key). */
     public String generate(String subject, Map<String, Object> extraClaims) {
         Instant now = Instant.now();
-
         return Jwts.builder()
-                .claims() // enter claims context
-                .issuer(issuer)
-                .audience().add(audience).and() // audience is now a nested builder
-                .subject(subject)
-                .add(extraClaims)
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plusSeconds(ttlMinutes * 60)))
-                .and() // exit claims context
-                .signWith(key) // algorithm inferred from key (HS256 here)
+                .claims() // new API
+                    .issuer(issuer)
+                    .audience().add(audience).and()
+                    .subject(subject)
+                    .add(extraClaims)
+                    .issuedAt(Date.from(now))
+                    .expiration(Date.from(now.plusSeconds(ttlMinutes * 60)))
+                .and()
+                .signWith(key, Jwts.SIG.HS256) // explicit and modern
                 .compact();
     }
 
+    /** Parse & verify signature and standard claims; throws if invalid. */
     public Jws<Claims> parse(String token) {
         return Jwts.parser()
-                .requireAudience(audience)
                 .requireIssuer(issuer)
-                .verifyWith(key)
+                .requireAudience(audience)
+                .clockSkewSeconds(60)      // helpful in dev
+                .verifyWith(key)           // replaces setSigningKey
                 .build()
-                .parseSignedClaims(token);
+                .parseSignedClaims(token); // new API -> getPayload() for Claims
+    }
+
+    @PostConstruct
+    void logKeyInfo() {
+        // Optional: quick fingerprint to ensure the same key is used across runs
+        byte[] enc = key.getEncoded();
+        String hash = Base64.getUrlEncoder().withoutPadding().encodeToString(sha256(enc)).substring(0, 12);
+        System.out.println("[JWT] alg=" + key.getAlgorithm() + " keyLen=" + enc.length + " keyHash=" + hash);
+    }
+    private byte[] sha256(byte[] data) {
+        try { return MessageDigest.getInstance("SHA-256").digest(data); }
+        catch (Exception e) { return new byte[0]; }
     }
 }
