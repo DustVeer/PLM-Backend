@@ -77,6 +77,9 @@ public class ProductController {
 
         Product created = _productService.createProduct(req);
 
+        created.setCreatedAt(now);
+        created.setUpdatedAt(now);
+
         return ResponseEntity.ok(created);
 
     }
@@ -91,7 +94,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id does not exist" );
         }
        
-        Product updated = _productService.updateProduct(id, req);
+        ProductResponse updated = _productService.updateProduct(id, req);
 
         return ResponseEntity.ok(updated);
 

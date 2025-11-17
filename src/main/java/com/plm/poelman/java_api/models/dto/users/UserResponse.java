@@ -13,6 +13,7 @@ public class UserResponse {
 
     public UserResponse(User user) {
         this.id = user.getId();
+        this.name = user.getName();
         this.email = user.getEmail();
         this.createdAt = user.getCreatedAt();
     }

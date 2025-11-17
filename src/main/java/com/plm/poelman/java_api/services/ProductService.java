@@ -69,7 +69,7 @@ public class ProductService {
     }
 
     @Transactional
-    public Product updateProduct(Long id, UpdateProductRequest req) {
+    public ProductResponse updateProduct(Long id, UpdateProductRequest req) {
 
         LocalDateTime now = LocalDateTime.now();
         Product product = new Product();
@@ -81,7 +81,15 @@ public class ProductService {
         product.setStatusId(req.getStatusId());
         product.setUpdatedAt(now);
 
-        return _productRepository.save(product);
+        _productRepository.save(product);
+
+        ProductResponse dto = new ProductResponse(
+                product,
+                _categoryRepository.findById(product.getCategoryId()).orElse(null),
+                new UserResponse(_userRepository.findById(product.getCreatedBy()).orElse(null)),
+                _statusRepository.findById(product.getStatusId()).orElse(null));
+
+        return dto;
     }
 
     @Transactional(readOnly = true)

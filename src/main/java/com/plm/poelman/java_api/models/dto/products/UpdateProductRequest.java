@@ -5,8 +5,8 @@ public class UpdateProductRequest {
     private String name;
     private String description;
 
-    private Long CategoryId;
-    private Long StatusId;
+    private Long categoryId;
+    private Long statusId;
 
     
     public String getName() {
@@ -22,15 +22,15 @@ public class UpdateProductRequest {
         this.description = description;
     }
     public Long getCategoryId() {
-        return this.CategoryId;
+        return this.categoryId;
     }
-    public void setCategoryId(Long CategoryId) {
-        this.CategoryId = CategoryId;
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
     }
     public Long getStatusId() {
-        return this.StatusId;
+        return this.statusId;
     }
-    public void setStatusId(Long StatusId) {
-        this.StatusId = StatusId;
+    public void setStatusId(Long statusId) {
+        this.statusId = statusId;
     }
 }

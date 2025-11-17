@@ -31,7 +31,7 @@ public class JwtService {
             @Value("${security.jwt.access-ttl-min}") long ttlMinutes) {
 
         // Decode the SAME Base64 secret for both signing and verification
-        byte[] keyBytes = Decoders.BASE64.decode(secretBase64);
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
 
         this.issuer = issuer;

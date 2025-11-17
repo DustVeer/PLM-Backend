@@ -21,6 +21,9 @@ public class ProductStatus {
 
     @Column(name = "Description", length = 4000)
     private String description;
+    
+    @Column(name = "StatusColorHex", length = 100)
+    private String statusColorHex;
 
     public Long getId() {
         return id;
@@ -44,6 +47,13 @@ public class ProductStatus {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getStatusColorHex() {
+        return statusColorHex;
+    }
+    public void setStatusColorHex(String statusColorHex) {
+        this.statusColorHex = statusColorHex;
     }
 }
 
