@@ -15,18 +15,21 @@ public class ProductResponse {
 
     private ProductCategory productCategory;
     private UserResponse createdBy;
+    private UserResponse updatedBy;
     private ProductStatus productStatus;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    public ProductResponse(Product product, ProductCategory productCategory, UserResponse createdBy,
+    
+    
+    public ProductResponse(Product product, ProductCategory productCategory, UserResponse createdBy, UserResponse updatedBy,
             ProductStatus productStatus) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
         this.productCategory = productCategory;
         this.createdBy = createdBy;
+        this.updatedBy = updatedBy;
         this.productStatus = productStatus;
         this.createdAt = product.getCreatedAt();
         this.updatedAt = product.getUpdatedAt();
@@ -86,6 +89,13 @@ public class ProductResponse {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public UserResponse getUpdatedBy() {
+        return this.updatedBy;
+    }
+    public void setUpdatedBy(UserResponse updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public LocalDateTime getUpdatedAt() {

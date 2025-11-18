@@ -33,11 +33,27 @@ public class Product {
     @Column(name = "StatusID", nullable = false)
     private Long statusId;
 
+    @Column(name = "UpdatedBy", nullable = false)
+    private Long updatedBy;
+
     @Column(name = "CreatedAt", nullable = false, updatable = false, insertable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "UpdatedAt", nullable = false, updatable = false, insertable = false)
     private LocalDateTime updatedAt;
+
+    public Product() {
+        
+    }
+
+    public Product(String name, String description, Long categoryId, Long createdBy, Long statusId, Long updatedBy) {
+        this.name = name;
+        this.description = description;
+        this.categoryId = categoryId;
+        this.createdBy = createdBy;
+        this.statusId = statusId;
+        this.updatedBy = updatedBy;
+    }
 
     public Long getId() {
         return this.id;
@@ -85,6 +101,13 @@ public class Product {
 
     public void setStatusId(Long statusId) {
         this.statusId = statusId;
+    }
+
+    public Long getUpdatedBy() {
+        return this.updatedBy;
+    }
+    public void setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public LocalDateTime getCreatedAt() {

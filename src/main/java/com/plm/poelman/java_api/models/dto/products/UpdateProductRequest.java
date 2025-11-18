@@ -7,7 +7,9 @@ public class UpdateProductRequest {
 
     private Long categoryId;
     private Long statusId;
+    private Long updatedBy;
 
+   
     
     public String getName() {
         return this.name;
@@ -32,5 +34,11 @@ public class UpdateProductRequest {
     }
     public void setStatusId(Long statusId) {
         this.statusId = statusId;
+    }
+     public Long getUpdatedBy() {
+        return this.updatedBy;
+    }
+    public void setUpdatedBy(Long updatedBy) {
+        this.updatedBy = updatedBy;
     }
 }
