@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.plm.poelman.java_api.models.User;
 import com.plm.poelman.java_api.models.dto.users.CreateUserRequest;
+import com.plm.poelman.java_api.models.dto.users.UpdateUserPasswordRequest;
+import com.plm.poelman.java_api.models.dto.users.UpdateUserRequest;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
 
 import com.plm.poelman.java_api.services.UserService;
@@ -28,6 +31,12 @@ public class UserController {
 
     public UserController(UserService userService) {
         this._userService = userService;
+    }
+
+    @GetMapping
+    public List<UserResponse> getUsers() {
+        return _userService.getAllUsersResponse();
+
     }
 
     @PostMapping
@@ -55,24 +64,65 @@ public class UserController {
 
         User saved = _userService.save(req);
 
-        UserResponse resp = new UserResponse(saved.getId(), saved.getName(), saved.getEmail(), saved.getCreatedAt());
+        UserResponse resp = new UserResponse(saved);
         return ResponseEntity.created(URI.create("/api/users/" + saved.getId())).body(resp);
     }
 
-    @GetMapping
-    public List<UserResponse> getUsers() {
-        return _userService.getAllUsersResponse();
+    @PutMapping("/{id}")
+    public ResponseEntity<UserResponse> updateUser(@RequestBody UpdateUserRequest req, @PathVariable Long id) {
+        if (req == null || id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
 
+        Optional<User> existing = _userService.findById(id);
+        if (existing.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        User toUpdate = existing.get();
+        if (req.getName() != null && !req.getName().isEmpty()) {
+            toUpdate.setName(req.getName());
+        }
+        if (req.getEmail() != null && !req.getEmail().isEmpty()) {
+            toUpdate.setEmail(req.getEmail());
+        }
+
+        UserResponse updated = _userService.update(toUpdate);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PutMapping("/{id}/password")
+    public ResponseEntity<?> updateUserPassword(@RequestBody UpdateUserPasswordRequest req,
+            @PathVariable Long id) {
+        if (req == null || id == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        if (req.getNewPassword() == null || req.getNewPassword().isEmpty()
+                || req.getOldPassword() == null || req.getOldPassword().isEmpty()
+                || req.getConfirmNewPassword() == null || req.getConfirmNewPassword().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password fields are required");
+        }
+
+        System.out.println("Updating password for user id: " + id);
+
+        Optional<User> existing = _userService.findById(id);
+        if (existing.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        Optional<UserResponse> updated = _userService.updatePassword(id, req);
+        if (updated.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password update failed");
+        }
+
+        return ResponseEntity.ok(updated.get());
     }
 
     @GetMapping("/{id}")
+
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
 
-        return _userService.findById(id).stream().map(u -> new UserResponse(
-                u.getId(),
-                u.getName(),
-                u.getEmail(),
-                u.getCreatedAt()))
+        return _userService.findById(id).stream().map(u -> new UserResponse(u))
                 .map(ResponseEntity::ok)
                 .findFirst()
                 .orElseGet(() -> ResponseEntity.notFound().build());
@@ -82,11 +132,7 @@ public class UserController {
     @GetMapping("/by-email")
     public ResponseEntity<UserResponse> getUserByEmail(@RequestParam String email) {
         return _userService.findByEmail(email)
-                .map(u -> new UserResponse(
-                        u.getId(),
-                        u.getName(),
-                        u.getEmail(),
-                        u.getCreatedAt()))
+                .map(u -> new UserResponse(u))
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
