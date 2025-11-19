@@ -1,32 +1,22 @@
 package com.plm.poelman.java_api.models.dto.statuses;
 
-
-import com.plm.poelman.java_api.models.ProductStatus;
-
-public class StatusResponse {
-    private Long id;
+public class CreateUpdateStatusRequest {
     private String name;
     private String description;
     private String statusColorHex;
     private Long sortOrder;
     private Integer active;
 
-    public StatusResponse(ProductStatus status) {
-        this.name = status.getName();
-        this.id = status.getId();
-        this.description = status.getDescription();
-        this.statusColorHex = status.getStatusColorHex();
-        this.sortOrder = status.getSortOrder();
-        this.active = status.getActive();
+    public CreateUpdateStatusRequest() {}
 
+    public CreateUpdateStatusRequest(String name, String description, String statusColorHex, Long sortOrder, Integer active) {
+        this.name = name;
+        this.description = description;
+        this.statusColorHex = statusColorHex;
+        this.sortOrder = sortOrder;
+        this.active = active;
     }
 
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
     public String getName() {
         return name;
     }
@@ -54,6 +44,8 @@ public class StatusResponse {
     public Integer getActive() {
         return active;
     }
-
+    public void setActive(Integer active) {
+        this.active = active;
+    }
 
 }

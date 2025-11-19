@@ -25,6 +25,33 @@ public class ProductStatus {
     @Column(name = "StatusColorHex", length = 100)
     private String statusColorHex;
 
+    @Column(name = "SortOrder", length = 100)
+    private Long sortOrder;
+
+    @Column(name = "Active", length = 100)
+    private Integer active;
+
+    public ProductStatus() {
+        // JPA requires a no-arg constructor
+    }
+
+    public ProductStatus(String name, String description, String statusColorHex, Long sortOrder, Integer active) {
+        this.name = name;
+        this.description = description;
+        this.statusColorHex = statusColorHex;
+        this.sortOrder = sortOrder;
+        this.active = active;
+    }
+
+    public ProductStatus(Long id, String name, String description, String statusColorHex, Long sortOrder, Integer active) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.statusColorHex = statusColorHex;
+        this.sortOrder = sortOrder;
+        this.active = active;
+    }
+
     public Long getId() {
         return id;
     }
@@ -55,5 +82,19 @@ public class ProductStatus {
     public void setStatusColorHex(String statusColorHex) {
         this.statusColorHex = statusColorHex;
     }
+
+    public Long getSortOrder() {
+        return sortOrder;
+    }
+    public void setSortOrder(Long sortOrder) {
+        this.sortOrder = sortOrder;
+    }
+    public Integer getActive() {
+        return active;
+    }
+    public void setActive(Integer active) {
+        this.active = active;
+    }
+
 }
 

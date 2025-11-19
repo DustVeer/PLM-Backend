@@ -85,9 +85,8 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> putProductById(@PathVariable Long id, @RequestBody UpdateProductRequest req) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest req) {
 
-        System.out.println("Received PUT request for ID: " + id + " with body: " + req.getDescription());
 
         if (req == null || id == 0 || id == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Body and Id are missing" );
@@ -97,6 +96,7 @@ public class ProductController {
         }
        
         ProductResponse updated = _productService.updateProduct(id, req);
+
 
         return ResponseEntity.ok(updated);
 

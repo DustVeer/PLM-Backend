@@ -81,10 +81,13 @@ public class ProductService {
         product.setStatusId(req.getStatusId());
         product.setUpdatedBy(req.getUpdatedBy());
         product.setCreatedBy(existingProduct.getCreatedBy());
+        product.setCreatedAt(existingProduct.getCreatedAt());
         product.setUpdatedAt(now);
 
         _productRepository.save(product);
         ProductResponse dto = this.getProductById(id);
+
+        System.out.println("Updated Product: " + dto.getName() + ", Description: " + dto.getDescription() + ", UpdatedAt: " + dto.getCreatedAt() );
 
         return dto;
     }
