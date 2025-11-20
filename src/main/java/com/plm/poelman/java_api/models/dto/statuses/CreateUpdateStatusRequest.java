@@ -1,20 +1,24 @@
 package com.plm.poelman.java_api.models.dto.statuses;
 
+import java.util.List;
+
 public class CreateUpdateStatusRequest {
     private String name;
     private String description;
     private String statusColorHex;
     private Long sortOrder;
-    private Integer active;
+    private Integer isActive;
+    private List<Long> requiredFieldIds;
 
     public CreateUpdateStatusRequest() {}
 
-    public CreateUpdateStatusRequest(String name, String description, String statusColorHex, Long sortOrder, Integer active) {
+    public CreateUpdateStatusRequest(String name, String description, String statusColorHex, Long sortOrder, Integer isActive, List<Long> requiredFieldIds) {
         this.name = name;
         this.description = description;
         this.statusColorHex = statusColorHex;
         this.sortOrder = sortOrder;
-        this.active = active;
+        this.isActive = isActive;
+        this.requiredFieldIds = requiredFieldIds;
     }
 
     public String getName() {
@@ -41,11 +45,17 @@ public class CreateUpdateStatusRequest {
     public void setSortOrder(Long sortOrder) {
         this.sortOrder = sortOrder;
     }
-    public Integer getActive() {
-        return active;
+    public Integer getIsActive() {
+        return isActive;
     }
-    public void setActive(Integer active) {
-        this.active = active;
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
+    }
+    public List<Long> getRequiredFieldIds() {
+        return requiredFieldIds;
+    }
+    public void setRequiredFieldIds(List<Long> requiredFieldIds) {
+        this.requiredFieldIds = requiredFieldIds;
     }
 
 }

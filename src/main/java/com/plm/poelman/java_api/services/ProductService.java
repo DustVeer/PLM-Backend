@@ -2,17 +2,17 @@ package com.plm.poelman.java_api.services;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.plm.poelman.java_api.models.Product;
-import com.plm.poelman.java_api.models.ProductCategory;
-import com.plm.poelman.java_api.models.ProductStatus;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
+import com.plm.poelman.java_api.models.dto.workflows.WorkflowResponse;
+import com.plm.poelman.java_api.models.dto.categories.CategoryResponse;
+import com.plm.poelman.java_api.models.dto.products.CreateUpdateProductRequest;
 import com.plm.poelman.java_api.models.dto.products.ProductResponse;
-import com.plm.poelman.java_api.models.dto.products.UpdateProductRequest;
+import com.plm.poelman.java_api.models.dto.statuses.StatusResponse;
 import com.plm.poelman.java_api.repositories.ProductCategoryRepository;
 import com.plm.poelman.java_api.repositories.ProductRepository;
 import com.plm.poelman.java_api.repositories.ProductStatusRepository;
@@ -47,7 +47,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public Boolean existsById(Long id) {
+    public boolean existsById(Long id) {
         return _productRepository.existsById(id);
     }
 
@@ -57,19 +57,19 @@ public class ProductService {
     }
 
     @Transactional
-    public Product createProduct(Product req) {
+    public Product createProduct(CreateUpdateProductRequest req) {
         Product product = new Product();
         product.setName(req.getName());
         product.setDescription(req.getDescription());
-        product.setCategoryId(req.getCategoryId());
-        product.setStatusId(req.getStatusId());
-        product.setCreatedBy(req.getCreatedBy());
+        product.setCategory(_categoryRepository.findById(req.getCategoryId()).orElse(null));
+        product.setStatus(_statusRepository.findById(req.getStatusId()).orElse(null));
+        product.setCreatedBy(_userRepository.findById(req.getCreatedById()).orElse(null));
 
         return _productRepository.save(product);
 
     }
 
-    public ProductResponse updateProduct(Long id, UpdateProductRequest req) {
+    public ProductResponse updateProduct(Long id, CreateUpdateProductRequest req) {
 
         Product existingProduct = _productRepository.findById(id).orElse(null);
         LocalDateTime now = LocalDateTime.now();
@@ -77,9 +77,9 @@ public class ProductService {
         product.setId(id);
         product.setName(req.getName());
         product.setDescription(req.getDescription());
-        product.setCategoryId(req.getCategoryId());
-        product.setStatusId(req.getStatusId());
-        product.setUpdatedBy(req.getUpdatedBy());
+        product.setCategory(_categoryRepository.findById(req.getCategoryId()).orElse(null));
+        product.setStatus(_statusRepository.findById(req.getStatusId()).orElse(null));
+        product.setUpdatedBy(_userRepository.findById(req.getUpdatedById()).orElse(null));
         product.setCreatedBy(existingProduct.getCreatedBy());
         product.setCreatedAt(existingProduct.getCreatedAt());
         product.setUpdatedAt(now);
@@ -95,33 +95,27 @@ public class ProductService {
     @Transactional(readOnly = true)
     public ProductResponse getProductById(Long id) {
         return _productRepository.findById(id)
-                .map(product -> {
-                    ProductCategory category = _categoryRepository.findById(product.getCategoryId()).orElse(null);
-                    UserResponse createdBy = new UserResponse(
-                            _userRepository.findById(product.getCreatedBy()).orElse(null));
-                    UserResponse updatedBy = new UserResponse(
-                            _userRepository.findById(product.getUpdatedBy()).orElse(null));
-                    ProductStatus status = _statusRepository.findById(product.getStatusId()).orElse(null);
-
-                    return new ProductResponse(product, category, createdBy, updatedBy, status);
-                })
+                .map(this::mapToProductResponse)
                 .orElse(null);
     }
 
     @Transactional(readOnly = true)
     public List<ProductResponse> getAllProductsResponse() {
         return _productRepository.findAll().stream()
-                .map(product -> {
-                    ProductCategory category = _categoryRepository.findById(product.getCategoryId()).orElse(null);
-                    UserResponse createdBy = new UserResponse(
-                            _userRepository.findById(product.getCreatedBy()).orElse(null));
-                    UserResponse updatedBy = new UserResponse(
-                            _userRepository.findById(product.getUpdatedBy()).orElse(null));
-                    ProductStatus status = _statusRepository.findById(product.getStatusId()).orElse(null);
-
-                    return new ProductResponse(product, category, createdBy, updatedBy, status);
-                }).toList();
-
+                .map(this::mapToProductResponse).toList();
     }
 
+    private ProductResponse mapToProductResponse(Product product) {
+        CategoryResponse category = new CategoryResponse(product.getCategory());
+        UserResponse createdBy = new UserResponse(product.getCreatedBy());
+        UserResponse updatedBy = new UserResponse(product.getUpdatedBy());
+        WorkflowResponse workflow = new WorkflowResponse(product.getWorkflow(), new UserResponse(product.getWorkflow().getCreatedBy()) , new UserResponse(product.getWorkflow().getUpdatedBy()), 
+                product.getWorkflow().getWorkflowStatuses().stream()
+                .map(ws -> new StatusResponse(ws.getStatus()))
+                .toList());
+        StatusResponse status = new StatusResponse(product.getStatus());
+    
+
+        return new ProductResponse(product, category, createdBy, updatedBy, status, workflow);
+    }
 }

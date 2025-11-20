@@ -2,10 +2,13 @@ package com.plm.poelman.java_api.models.dto.products;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.boot.registry.classloading.spi.ClassLoaderService.Work;
+
 import com.plm.poelman.java_api.models.Product;
-import com.plm.poelman.java_api.models.ProductCategory;
-import com.plm.poelman.java_api.models.ProductStatus;
+import com.plm.poelman.java_api.models.dto.categories.CategoryResponse;
+import com.plm.poelman.java_api.models.dto.statuses.StatusResponse;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
+import com.plm.poelman.java_api.models.dto.workflows.WorkflowResponse;
 
 public class ProductResponse {
 
@@ -13,17 +16,19 @@ public class ProductResponse {
     private String name;
     private String description;
 
-    private ProductCategory productCategory;
+    private CategoryResponse productCategory;
     private UserResponse createdBy;
     private UserResponse updatedBy;
-    private ProductStatus productStatus;
+    private StatusResponse productStatus;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    private WorkflowResponse workflow;
     
     
-    public ProductResponse(Product product, ProductCategory productCategory, UserResponse createdBy, UserResponse updatedBy,
-            ProductStatus productStatus) {
+    public ProductResponse(Product product, CategoryResponse productCategory, UserResponse createdBy, UserResponse updatedBy,
+            StatusResponse productStatus, WorkflowResponse workflow) {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
@@ -31,6 +36,7 @@ public class ProductResponse {
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.productStatus = productStatus;
+        this.workflow = workflow;
         this.createdAt = product.getCreatedAt();
         this.updatedAt = product.getUpdatedAt();
     }
@@ -59,11 +65,11 @@ public class ProductResponse {
         this.description = description;
     }
 
-    public ProductCategory getProductCategory() {
+    public CategoryResponse getProductCategory() {
         return this.productCategory;
     }
 
-    public void setProductCategory(ProductCategory productCategory) {
+    public void setProductCategory(CategoryResponse productCategory) {
         this.productCategory = productCategory;
     }
 
@@ -75,12 +81,19 @@ public class ProductResponse {
         this.createdBy = createdBy;
     }
 
-    public ProductStatus getProductStatus() {
+    public StatusResponse getProductStatus() {
         return this.productStatus;
     }
 
-    public void setProductStatus(ProductStatus productStatus) {
+    public void setProductStatus(StatusResponse productStatus) {
         this.productStatus = productStatus;
+    }
+
+    public WorkflowResponse getWorkflow() {
+        return this.workflow;
+    }
+    public void setWorkflow(WorkflowResponse workflow) {
+        this.workflow = workflow;
     }
 
     public LocalDateTime getCreatedAt() {

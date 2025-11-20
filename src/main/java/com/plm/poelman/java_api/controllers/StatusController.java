@@ -56,8 +56,7 @@ public class StatusController {
             return ResponseEntity.badRequest().body("Status with the same sort order already exists");
         }
 
-        ProductStatus newStatus = new ProductStatus(req.getName(), req.getDescription(), req.getStatusColorHex(), req.getSortOrder(), req.getActive());
-        StatusResponse dto = _statusService.createStatus(newStatus);
+        StatusResponse dto = _statusService.createStatus(req);
 
         return ResponseEntity.ok().body(dto);
     }

@@ -1,10 +1,15 @@
 package com.plm.poelman.java_api.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,28 +33,33 @@ public class ProductStatus {
     @Column(name = "SortOrder", length = 100)
     private Long sortOrder;
 
-    @Column(name = "Active", length = 100)
-    private Integer active;
+    @Column(name = "IsActive", length = 100)
+    private Integer isActive;
+
+    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<StatusRequiredField> statusRequiredFields = new ArrayList<>();
 
     public ProductStatus() {
         // JPA requires a no-arg constructor
     }
 
-    public ProductStatus(String name, String description, String statusColorHex, Long sortOrder, Integer active) {
+    public ProductStatus(String name, String description, String statusColorHex, Long sortOrder, Integer isActive, List<StatusRequiredField> statusRequiredFields) {
         this.name = name;
         this.description = description;
         this.statusColorHex = statusColorHex;
         this.sortOrder = sortOrder;
-        this.active = active;
+        this.isActive = isActive;   
+        this.statusRequiredFields = statusRequiredFields;
     }
 
-    public ProductStatus(Long id, String name, String description, String statusColorHex, Long sortOrder, Integer active) {
+    public ProductStatus(Long id, String name, String description, String statusColorHex, Long sortOrder, Integer isActive, List<StatusRequiredField> statusRequiredFields) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.statusColorHex = statusColorHex;
         this.sortOrder = sortOrder;
-        this.active = active;
+        this.isActive = isActive;
+        this.statusRequiredFields = statusRequiredFields;
     }
 
     public Long getId() {
@@ -89,12 +99,29 @@ public class ProductStatus {
     public void setSortOrder(Long sortOrder) {
         this.sortOrder = sortOrder;
     }
-    public Integer getActive() {
-        return active;
+    public Integer getIsActive() {
+        return isActive;
     }
-    public void setActive(Integer active) {
-        this.active = active;
+    public void setIsActive(Integer isActive) {
+        this.isActive = isActive;
     }
+    public List<StatusRequiredField> getStatusRequiredFields() {
+        return statusRequiredFields;
+    }
+    public void setStatusRequiredFields(List<StatusRequiredField> statusRequiredFields) {
+        this.statusRequiredFields = statusRequiredFields;
+    }
+    public void addStatusRequiredField(StatusRequiredField statusRequiredField) {
+        this.statusRequiredFields.add(statusRequiredField);
+    }
+    public void removeStatusRequiredField(StatusRequiredField statusRequiredField) {
+        this.statusRequiredFields.remove(statusRequiredField);
+    }
+    public void clearStatusRequiredFields() {
+        this.statusRequiredFields.clear();
+    }
+
+    
 
 }
 

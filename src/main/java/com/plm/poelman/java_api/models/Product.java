@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,17 +27,25 @@ public class Product {
     @Column(name = "Description", length = 4000)
     private String description;
 
-    @Column(name = "CategoryID", nullable = false)
-    private Long categoryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CategoryID", nullable = false)
+    private ProductCategory category;
 
-    @Column(name = "CreatedBy", nullable = false)
-    private Long createdBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "StatusID", nullable = false)
+    private ProductStatus status;
 
-    @Column(name = "StatusID", nullable = false)
-    private Long statusId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CreatedBy", nullable = false)
+    private User createdBy;
 
-    @Column(name = "UpdatedBy", nullable = false)
-    private Long updatedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UpdatedBy", nullable = false)
+    private User updatedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "WorkflowID", nullable = false)
+    private Workflow workflow;
 
     @Column(name = "CreatedAt", nullable = false, updatable = false, insertable = false)
     private LocalDateTime createdAt;
@@ -46,17 +57,18 @@ public class Product {
         
     }
 
-    public Product(String name, String description, Long categoryId, Long createdBy, Long statusId, Long updatedBy) {
+    public Product(String name, String description, ProductCategory category, User createdBy, ProductStatus status, User updatedBy, Workflow workflow) {
         this.name = name;
         this.description = description;
-        this.categoryId = categoryId;
+        this.category = category;
         this.createdBy = createdBy;
-        this.statusId = statusId;
+        this.status = status;
         this.updatedBy = updatedBy;
+        this.workflow = workflow;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -64,7 +76,7 @@ public class Product {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -72,46 +84,54 @@ public class Product {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Long getCategoryId() {
-        return this.categoryId;
+    public ProductCategory getCategory() {
+        return category;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 
-    public Long getCreatedBy() {
-        return this.createdBy;
+    public ProductStatus getStatus() {
+        return status;
     }
 
-    public void setCreatedBy(Long createdBy) {
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
     }
 
-    public Long getStatusId() {
-        return this.statusId;
+    public User getUpdatedBy() {
+        return updatedBy;
     }
 
-    public void setStatusId(Long statusId) {
-        this.statusId = statusId;
-    }
-
-    public Long getUpdatedBy() {
-        return this.updatedBy;
-    }
-    public void setUpdatedBy(Long updatedBy) {
+    public void setUpdatedBy(User updatedBy) {
         this.updatedBy = updatedBy;
+    }
+    
+    public Workflow getWorkflow() {
+        return workflow;
+    }
+    public void setWorkflow(Workflow workflow) {
+        this.workflow = workflow;
     }
 
     public LocalDateTime getCreatedAt() {
-        return this.createdAt;
+        return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
@@ -119,10 +139,14 @@ public class Product {
     }
 
     public LocalDateTime getUpdatedAt() {
-        return this.updatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    
+    
+
 }

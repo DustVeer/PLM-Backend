@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plm.poelman.java_api.models.Product;
+import com.plm.poelman.java_api.models.dto.products.CreateUpdateProductRequest;
 import com.plm.poelman.java_api.models.dto.products.ProductResponse;
-import com.plm.poelman.java_api.models.dto.products.UpdateProductRequest;
 import com.plm.poelman.java_api.services.ProductService;
 
 @RestController
@@ -34,6 +34,8 @@ public class ProductController {
         return _productService.getAllProductsResponse();
     }
 
+    
+
     @GetMapping("/{id}")
     public ProductResponse getProductById(@PathVariable Long id) {
 
@@ -41,7 +43,7 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> postProduct(@RequestBody Product req) {
+    public ResponseEntity<?> postProduct(@RequestBody CreateUpdateProductRequest req) {
 
         if (req == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Body is missing" );
@@ -58,7 +60,7 @@ public class ProductController {
         if(req.getStatusId() == null || req.getStatusId() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("StatusId is missing" );
         }
-        if(req.getCreatedBy() == null || req.getCreatedBy() == 0) {
+        if(req.getCreatedById() == null || req.getCreatedById() == 0) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CreatedBy is missing" );
         }
         if(!_productService.existsByCategoryId(req.getCategoryId())) {
@@ -67,7 +69,7 @@ public class ProductController {
         if(!_productService.existsByStatusId(req.getStatusId())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("StatusId does not exist" );
         }
-        if(!_productService.existsByUserId(req.getCreatedBy())) {
+        if(!_productService.existsByUserId(req.getCreatedById())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CreatedBy UserId does not exist" );
         }
 
@@ -85,7 +87,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest req) {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody CreateUpdateProductRequest req) {
 
 
         if (req == null || id == 0 || id == null) {

@@ -10,7 +10,9 @@ import com.plm.poelman.java_api.models.ProductStatus;
 
 @Repository
 public interface ProductStatusRepository extends JpaRepository<ProductStatus, Long> {
-    List<ProductStatus> findByActive(Integer active);
+    List<ProductStatus> findByIsActive(Integer isActive);
+    List<ProductStatus> findByIdIn(List<Long> ids);
     Optional<ProductStatus> findByName(String name);
     Optional<ProductStatus> findBySortOrder(Long sortOrder);
+
 }
