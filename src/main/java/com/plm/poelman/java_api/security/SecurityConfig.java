@@ -40,7 +40,6 @@ public class SecurityConfig {
                 .logout(logout -> logout.disable())
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((req, res, ex) -> {
-                            // Optional: return a JSON error instead of blank 401
                             res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             res.setContentType("application/json");
                             res.getWriter().write("{\"error\":\"unauthorized\"}");

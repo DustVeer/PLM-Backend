@@ -72,11 +72,14 @@ public class WorkflowService {
     @Transactional
     public WorkflowResponse createWorkflow(CreateUpdateWorkflowRequest req) {
 
+
         User createdBy = _userRepository.findById(req.getCreatedById()).orElse(null);
 
         if (createdBy == null) {
             return null;
         }
+
+        System.out.println("Req statuses:" + req.getStatuses());
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -89,15 +92,19 @@ public class WorkflowService {
         newWorkflow.setUpdatedBy(createdBy);
         newWorkflow.setCreatedAt(now);
         newWorkflow.setUpdatedAt(now);
-        
-        List<ProductStatus> statuses = _statusRepository.findByIdIn(req.getStatusIds());
-        newWorkflow.clearWorkflowStatuses();
 
-        for (ProductStatus status : statuses) {
-            WorkflowStatus ws = new WorkflowStatus();
-            ws.setWorkflow(newWorkflow);
-            ws.setStatus(status);
-            newWorkflow.addWorkflowStatus(ws);
+        if (req.getStatuses() != null) {
+            List<ProductStatus> statuses = _statusRepository
+                    .findByIdIn(req.getStatuses().stream().map(s -> s.getStatusId()).toList());
+            newWorkflow.clearWorkflowStatuses();
+
+            for (int i = 0; i < statuses.size(); i++) {
+                WorkflowStatus ws = new WorkflowStatus();
+                ws.setWorkflow(newWorkflow);
+                ws.setStatus(statuses.get(i));
+                ws.setSortOrder(req.getStatuses().get(i).getSortOrder());
+                newWorkflow.addWorkflowStatus(ws);
+            }
         }
 
         Workflow savedWorkflow = _workflowRepository.save(newWorkflow);
@@ -111,6 +118,7 @@ public class WorkflowService {
 
     @Transactional
     public WorkflowResponse updateWorkflow(Long id, CreateUpdateWorkflowRequest req) {
+        
         Workflow toUpdatedWorkflow = _workflowRepository.findById(id).orElse(null);
         if (toUpdatedWorkflow == null) {
             return null;
@@ -130,14 +138,17 @@ public class WorkflowService {
         toUpdatedWorkflow.setUpdatedBy(updatedBy);
         toUpdatedWorkflow.setUpdatedAt(now);
 
-        toUpdatedWorkflow.clearWorkflowStatuses();
-        List<ProductStatus> statuses = req.getStatusIds().stream()
-                .map(si -> _statusRepository.findById(si).orElse(null)).toList();
-        for (ProductStatus status : statuses) {
-            WorkflowStatus ws = new WorkflowStatus();
-            ws.setWorkflow(toUpdatedWorkflow);
-            ws.setStatus(status);
-            toUpdatedWorkflow.addWorkflowStatus(ws);
+        if (req.getStatuses() != null) {
+            List<ProductStatus> statuses = _statusRepository
+                    .findByIdIn(req.getStatuses().stream().map(s -> s.getStatusId()).toList());
+            toUpdatedWorkflow.clearWorkflowStatuses();
+            for (int i = 0; i < statuses.size(); i++) {
+                WorkflowStatus ws = new WorkflowStatus();
+                ws.setWorkflow(toUpdatedWorkflow);
+                ws.setStatus(statuses.get(i));
+                ws.setSortOrder(req.getStatuses().get(i).getSortOrder());
+                toUpdatedWorkflow.addWorkflowStatus(ws);
+            }
         }
 
         Workflow savedWorkflow = _workflowRepository.save(toUpdatedWorkflow);
@@ -155,6 +166,8 @@ public class WorkflowService {
         if (workflow == null) {
             return null;
         }
+
+        System.out.println("Toggling active status for workflow with ID: " + id);
 
         workflow.setIsActive(workflow.getIsActive() == 0 ? 1 : 0);
         Workflow savedWorkflow = _workflowRepository.save(workflow);

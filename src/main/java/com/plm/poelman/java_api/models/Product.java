@@ -2,6 +2,8 @@ package com.plm.poelman.java_api.models;
 
 import java.time.LocalDateTime;
 
+import com.plm.poelman.java_api.models.dto.products.CreateUpdateProductRequest;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -27,24 +29,30 @@ public class Product {
     @Column(name = "Description", length = 4000)
     private String description;
 
+    @Column(name = "Colour", length = 100)
+    private String colour;
+
+    @Column(name = "Price", length = 100)
+    private Float price;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CategoryID", nullable = false)
+    @JoinColumn(name = "CategoryID")
     private ProductCategory category;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "StatusID", nullable = false)
+    @JoinColumn(name = "StatusID")
     private ProductStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CreatedBy", nullable = false)
+    @JoinColumn(name = "CreatedBy", updatable = false)
     private User createdBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "UpdatedBy", nullable = false)
+    @JoinColumn(name = "UpdatedBy", updatable = false)
     private User updatedBy;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "WorkflowID", nullable = false)
+    @JoinColumn(name = "WorkflowID")
     private Workflow workflow;
 
     @Column(name = "CreatedAt", nullable = false, updatable = false, insertable = false)
@@ -57,15 +65,17 @@ public class Product {
         
     }
 
-    public Product(String name, String description, ProductCategory category, User createdBy, ProductStatus status, User updatedBy, Workflow workflow) {
+    public Product(String name, String description, Float price, ProductCategory category, User createdBy, ProductStatus status, User updatedBy, Workflow workflow) {
         this.name = name;
         this.description = description;
+        this.price = price;
         this.category = category;
         this.createdBy = createdBy;
         this.status = status;
         this.updatedBy = updatedBy;
         this.workflow = workflow;
     }
+
 
     public Long getId() {
         return id;
@@ -89,6 +99,20 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    public String getColour() {
+        return colour;
+    }
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public ProductCategory getCategory() {

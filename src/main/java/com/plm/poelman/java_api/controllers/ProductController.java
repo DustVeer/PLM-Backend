@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.plm.poelman.java_api.models.Product;
+import com.plm.poelman.java_api.models.dto.errors.StatusChangeError;
 import com.plm.poelman.java_api.models.dto.products.CreateUpdateProductRequest;
 import com.plm.poelman.java_api.models.dto.products.ProductResponse;
+import com.plm.poelman.java_api.models.dto.products.SmallProductResponse;
 import com.plm.poelman.java_api.services.ProductService;
 
 @RestController
@@ -29,9 +31,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> getAllProducts() {
+    public List<SmallProductResponse> getAllProducts() {
 
-        return _productService.getAllProductsResponse();
+        return _productService.getAllSmallProductsResponse();
     }
 
     
@@ -51,24 +53,6 @@ public class ProductController {
         if(req.getName() == null || req.getName().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Name is missing" );
         }
-        if(req.getDescription() == null || req.getDescription().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Description is missing" );
-        }
-        if(req.getCategoryId() == null || req.getCategoryId() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CategoryId is missing" );
-        }
-        if(req.getStatusId() == null || req.getStatusId() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("StatusId is missing" );
-        }
-        if(req.getCreatedById() == null || req.getCreatedById() == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CreatedBy is missing" );
-        }
-        if(!_productService.existsByCategoryId(req.getCategoryId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CategoryId does not exist" );
-        }
-        if(!_productService.existsByStatusId(req.getStatusId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("StatusId does not exist" );
-        }
         if(!_productService.existsByUserId(req.getCreatedById())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("CreatedBy UserId does not exist" );
         }
@@ -77,12 +61,11 @@ public class ProductController {
         req.setCreatedAt(now);
         req.setUpdatedAt(now);
 
-        Product created = _productService.createProduct(req);
+        System.out.println("Creating product with name: " + req.getName());
 
-        created.setCreatedAt(now);
-        created.setUpdatedAt(now);
+        ProductResponse dto = _productService.createProduct(req);
 
-        return ResponseEntity.ok(created);
+        return ResponseEntity.ok(dto);
 
     }
 
@@ -98,10 +81,39 @@ public class ProductController {
         }
        
         ProductResponse updated = _productService.updateProduct(id, req);
-
+        if (updated == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update product" );
+            
+        }
 
         return ResponseEntity.ok(updated);
 
+    }
+
+    @PutMapping("/{id}/status/{statusId}")
+    public ResponseEntity<?> updateProductStatus(@PathVariable Long id, @PathVariable Long statusId) {
+        if (id == null || statusId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id and StatusId are missing" );
+        }
+        if(!_productService.existsById(id)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Id does not exist" );
+        }
+        if(!_productService.existsByStatusId(statusId)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("StatusId does not exist" );
+        }
+        List<String> missingFields = _productService.allowedStatusChangeByID(id);
+        if(!missingFields.isEmpty()) {
+            StatusChangeError error = new StatusChangeError("Cannot change to the requested status. Missing required fields.", missingFields);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        ProductResponse updated = _productService.changeProductStatus(id, statusId);
+        if (updated == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update product status");
+            
+        }
+
+        return ResponseEntity.ok(updated);
     }
 
 }

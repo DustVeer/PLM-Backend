@@ -108,6 +108,13 @@ public class ProductStatus {
     public List<StatusRequiredField> getStatusRequiredFields() {
         return statusRequiredFields;
     }
+    public List<RequiredField> getRequiredFields() {
+        List<RequiredField> requiredFields = new ArrayList<>();
+        for (StatusRequiredField srf : this.statusRequiredFields) {
+            requiredFields.add(srf.getRequiredField());
+        }
+        return requiredFields;
+    }
     public void setStatusRequiredFields(List<StatusRequiredField> statusRequiredFields) {
         this.statusRequiredFields = statusRequiredFields;
     }

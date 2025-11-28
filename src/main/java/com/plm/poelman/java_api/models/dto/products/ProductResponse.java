@@ -2,7 +2,6 @@ package com.plm.poelman.java_api.models.dto.products;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.boot.registry.classloading.spi.ClassLoaderService.Work;
 
 import com.plm.poelman.java_api.models.Product;
 import com.plm.poelman.java_api.models.dto.categories.CategoryResponse;
@@ -15,6 +14,8 @@ public class ProductResponse {
     private Long id;
     private String name;
     private String description;
+    private String colour;
+    private Float price;
 
     private CategoryResponse productCategory;
     private UserResponse createdBy;
@@ -32,11 +33,23 @@ public class ProductResponse {
         this.id = product.getId();
         this.name = product.getName();
         this.description = product.getDescription();
+        this.colour = product.getColour();
+        this.price = product.getPrice();
         this.productCategory = productCategory;
         this.createdBy = createdBy;
         this.updatedBy = updatedBy;
         this.productStatus = productStatus;
         this.workflow = workflow;
+        this.createdAt = product.getCreatedAt();
+        this.updatedAt = product.getUpdatedAt();
+    }
+
+    public ProductResponse(Product product) {
+        this.id = product.getId();
+        this.name = product.getName();
+        this.description = product.getDescription();
+        this.colour = product.getColour();
+        this.price = product.getPrice();
         this.createdAt = product.getCreatedAt();
         this.updatedAt = product.getUpdatedAt();
     }
@@ -63,6 +76,21 @@ public class ProductResponse {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getColour() {
+        return this.colour;
+    }
+
+    public void setColour(String colour) {
+        this.colour = colour;
+    }
+
+    public Float getPrice() {
+        return this.price;
+    }
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     public CategoryResponse getProductCategory() {

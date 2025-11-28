@@ -22,16 +22,20 @@ public class WorkflowStatus {
     @JoinColumn(name = "StatusID", nullable = false)
     private ProductStatus status; // Assuming you already have ProductStatus entity
 
+    @Column(name = "SortOrder", nullable = false)
+    private int sortOrder;
+
     public WorkflowStatus() {
     }
 
-    public WorkflowStatus(Workflow workflow, ProductStatus status) {
+    public WorkflowStatus(Workflow workflow, ProductStatus status, int sortOrder) {
         this.workflow = workflow;
         this.status = status;
         this.id = new WorkflowStatusId(
                 workflow != null ? workflow.getId() : null,
                 status != null ? status.getId() : null
         );
+        this.sortOrder = sortOrder;
     }
 
     public WorkflowStatusId getId() {
@@ -68,5 +72,11 @@ public class WorkflowStatus {
             }
             this.id.setStatusId(status.getId());
         }
+    }
+    public int getSortOrder() {
+        return sortOrder;
+    }
+    public void setSortOrder(int sortOrder) {
+        this.sortOrder = sortOrder;
     }
 }

@@ -3,6 +3,8 @@ package com.plm.poelman.java_api.models.dto.workflows;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.hibernate.boot.registry.classloading.spi.ClassLoaderService.Work;
+
 
 
 public class CreateUpdateWorkflowRequest {
@@ -14,14 +16,14 @@ public class CreateUpdateWorkflowRequest {
     private Long updatedById;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<Long> statusIds;
+    private List<WorkflowStatusRequest> statuses;
 
     public CreateUpdateWorkflowRequest() {
     }
 
 
     public CreateUpdateWorkflowRequest(String name, String description, Integer isActive, Integer isDefault, Long createdById, Long updatedById,
-            LocalDateTime createdAt, LocalDateTime updatedAt, List<Long> statusIds) {
+            LocalDateTime createdAt, LocalDateTime updatedAt, List<WorkflowStatusRequest> statuses) {
         this.name = name;
         this.description = description;
         this.isActive = isActive;
@@ -30,7 +32,7 @@ public class CreateUpdateWorkflowRequest {
         this.updatedById = updatedById;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.statusIds = statusIds;
+        this.statuses = statuses;
     }
 
 
@@ -73,11 +75,11 @@ public class CreateUpdateWorkflowRequest {
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
-    public List<Long> getStatusIds() {
-        return statusIds;
+    public List<WorkflowStatusRequest> getStatuses() {
+        return statuses;
     }
-    public void setStatusIds(List<Long> statusIds) {
-        this.statusIds = statusIds;
+    public void setStatuses(List<WorkflowStatusRequest> statuses) {
+        this.statuses = statuses;
     }
     public void setCreatedById(Long createdById) {
         this.createdById = createdById;
