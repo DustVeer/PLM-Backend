@@ -35,13 +35,16 @@ public class PasswordUtils {
 
     public boolean verify(char[] rawPassword, byte[] salt, byte[] expectedHash) {
         byte[] actual = hash(rawPassword, salt);
+
         return constantTimeEquals(actual, expectedHash);
     }
 
     private boolean constantTimeEquals(byte[] a, byte[] b) {
-        if (a == null || b == null || a.length != b.length) return false;
+        if (a == null || b == null || a.length != b.length)
+            return false;
         int result = 0;
-        for (int i = 0; i < a.length; i++) result |= (a[i] ^ b[i]);
+        for (int i = 0; i < a.length; i++)
+            result |= (a[i] ^ b[i]);
         return result == 0;
     }
 

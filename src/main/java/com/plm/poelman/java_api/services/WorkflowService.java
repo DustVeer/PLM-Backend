@@ -72,7 +72,6 @@ public class WorkflowService {
     @Transactional
     public WorkflowResponse createWorkflow(CreateUpdateWorkflowRequest req) {
 
-
         User createdBy = _userRepository.findById(req.getCreatedById()).orElse(null);
 
         if (createdBy == null) {
@@ -118,7 +117,7 @@ public class WorkflowService {
 
     @Transactional
     public WorkflowResponse updateWorkflow(Long id, CreateUpdateWorkflowRequest req) {
-        
+
         Workflow toUpdatedWorkflow = _workflowRepository.findById(id).orElse(null);
         if (toUpdatedWorkflow == null) {
             return null;

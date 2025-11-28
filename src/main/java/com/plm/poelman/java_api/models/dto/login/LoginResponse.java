@@ -1,7 +1,7 @@
 package com.plm.poelman.java_api.models.dto.login;
 
 import com.plm.poelman.java_api.models.User;
-import com.plm.poelman.java_api.models.dto.userRoles.UserRoleResponse;
+import com.plm.poelman.java_api.models.dto.UserRoles.UserRoleResponse;
 
 public class LoginResponse {
 

@@ -1,8 +1,6 @@
 package com.plm.poelman.java_api.models;
 
 import com.plm.poelman.java_api.models.IDs.StatusRequiredFieldId;
-import com.plm.poelman.java_api.models.IDs.WorkflowStatusId;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -22,7 +20,8 @@ public class StatusRequiredField {
     @JoinColumn(name = "RequiredFieldID", nullable = false)
     private RequiredField requiredField;
 
-    public StatusRequiredField() {}
+    public StatusRequiredField() {
+    }
 
     public StatusRequiredField(ProductStatus status, RequiredField requiredField) {
         this.status = status;
@@ -30,31 +29,33 @@ public class StatusRequiredField {
         this.id = new StatusRequiredFieldId(status.getId(), requiredField.getId());
     }
 
-
-
     public StatusRequiredFieldId getId() {
         return id;
     }
+
     public void setId(StatusRequiredFieldId id) {
         this.id = id;
-        
+
     }
 
     public ProductStatus getStatus() {
         return status;
     }
+
     public void setStatus(ProductStatus status) {
-         this.status = status;
-         if (status != null) {
+        this.status = status;
+        if (status != null) {
             if (this.id == null) {
                 this.id = new StatusRequiredFieldId();
             }
             this.id.setStatusId(status.getId());
         }
     }
+
     public RequiredField getRequiredField() {
         return requiredField;
     }
+
     public void setRequiredField(RequiredField requiredField) {
         this.requiredField = requiredField;
         if (requiredField != null) {

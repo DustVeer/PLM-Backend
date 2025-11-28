@@ -5,9 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.text.StyleContext.SmallAttributeSet;
-
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,9 +64,8 @@ public class ProductService {
                 String fieldKey = rf.getFieldKey();
                 String fieldKeyFirstLower = Character.toLowerCase(fieldKey.charAt(0)) + fieldKey.substring(1);
 
-
                 Field field = Product.class.getDeclaredField(fieldKeyFirstLower);
-                
+
                 field.setAccessible(true);
                 Object value = field.get(product);
 
@@ -78,8 +74,7 @@ public class ProductService {
                 }
             }
             return missingFields;
-        }   
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new RuntimeException("Required field validation failed", e);
         }
     }
@@ -201,5 +196,4 @@ public class ProductService {
         return new SmallProductResponse(product, product.getStatus());
     }
 
-   
 }

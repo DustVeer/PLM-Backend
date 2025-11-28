@@ -98,8 +98,8 @@ public class UserService {
 
         byte[] salt = user.getPasswordSalt();
 
-        System.out.println("passwordReact:" + req.getPassword());
         byte[] expectedHash = user.getPasswordHash();
+
 
         boolean ok = _passwordUtils.verify(req.getPassword().toCharArray(), salt, expectedHash);
 

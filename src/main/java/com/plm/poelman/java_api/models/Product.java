@@ -2,8 +2,6 @@ package com.plm.poelman.java_api.models;
 
 import java.time.LocalDateTime;
 
-import com.plm.poelman.java_api.models.dto.products.CreateUpdateProductRequest;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -62,10 +60,11 @@ public class Product {
     private LocalDateTime updatedAt;
 
     public Product() {
-        
+
     }
 
-    public Product(String name, String description, Float price, ProductCategory category, User createdBy, ProductStatus status, User updatedBy, Workflow workflow) {
+    public Product(String name, String description, Float price, ProductCategory category, User createdBy,
+            ProductStatus status, User updatedBy, Workflow workflow) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -75,7 +74,6 @@ public class Product {
         this.updatedBy = updatedBy;
         this.workflow = workflow;
     }
-
 
     public Long getId() {
         return id;
@@ -100,9 +98,11 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
+
     public String getColour() {
         return colour;
     }
+
     public void setColour(String colour) {
         this.colour = colour;
     }
@@ -146,10 +146,11 @@ public class Product {
     public void setUpdatedBy(User updatedBy) {
         this.updatedBy = updatedBy;
     }
-    
+
     public Workflow getWorkflow() {
         return workflow;
     }
+
     public void setWorkflow(Workflow workflow) {
         this.workflow = workflow;
     }
@@ -169,8 +170,5 @@ public class Product {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    
-    
 
 }

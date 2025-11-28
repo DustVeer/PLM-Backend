@@ -1,16 +1,13 @@
 package com.plm.poelman.java_api.services;
 
-import java.io.ObjectInputFilter.Status;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.plm.poelman.java_api.models.Product;
 import com.plm.poelman.java_api.models.ProductStatus;
 import com.plm.poelman.java_api.models.RequiredField;
 import com.plm.poelman.java_api.models.StatusRequiredField;
-import com.plm.poelman.java_api.models.dto.requiredFields.RequiredFieldResponse;
 import com.plm.poelman.java_api.models.dto.statuses.CreateUpdateStatusRequest;
 import com.plm.poelman.java_api.models.dto.statuses.StatusResponse;
 import com.plm.poelman.java_api.repositories.ProductStatusRepository;

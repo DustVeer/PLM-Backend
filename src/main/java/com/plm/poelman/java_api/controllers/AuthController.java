@@ -32,11 +32,17 @@ public class AuthController {
             return ResponseEntity.badRequest().body("email and password are required");
         }
 
+        System.out.println("email=" + req.getEmail());
+        System.out.println("password=" + req.getPassword());
+
         var userOpt = UserService.Login(req);
+
         if (userOpt.isEmpty()) {
             return ResponseEntity.status(401).body("invalid email or password");
         }
         User user = userOpt.get();
+
+        System.out.println("user logged in ID: " + user.getEmail());
 
         System.err.println("user logged in Role: " + user.getRole().getName());
         System.err.println("user logged in Email: " + user.getEmail());
