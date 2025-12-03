@@ -11,12 +11,26 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.beans.factory.annotation.Value; 
+
 
 import jakarta.servlet.http.HttpServletResponse;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Value("${cors.allowed.origins}")
+    private String allowedOrigins;
+
+    @Value("${cors.allowed.methods}")
+    private String allowedMethods;
+
+    @Value("${cors.allowed.headers}")
+    private String allowedHeaders;
+
+    @Value("${cors.allowed.credentials}")
+    private boolean allowCredentials;
 
     private final JwtAuthFilter _jwtAuthFilter;
 
@@ -53,10 +67,10 @@ public class SecurityConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173") // your frontend URL
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                        .allowedHeaders("*")
-                        .allowCredentials(true);
+                        .allowedOrigins(allowedOrigins.split(","))
+                        .allowedMethods(allowedMethods.split(","))
+                        .allowedHeaders(allowedHeaders.split(","))
+                        .allowCredentials(allowCredentials);
             }
         };
     }
