@@ -55,7 +55,7 @@ public class ProductResponse {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -63,7 +63,7 @@ public class ProductResponse {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -71,7 +71,7 @@ public class ProductResponse {
     }
 
     public String getDescription() {
-        return this.description;
+        return description;
     }
 
     public void setDescription(String description) {
@@ -79,7 +79,7 @@ public class ProductResponse {
     }
 
     public String getColour() {
-        return this.colour;
+        return colour;
     }
 
     public void setColour(String colour) {
@@ -87,14 +87,15 @@ public class ProductResponse {
     }
 
     public Float getPrice() {
-        return this.price;
+        return price;
     }
+
     public void setPrice(Float price) {
         this.price = price;
     }
 
     public CategoryResponse getProductCategory() {
-        return this.productCategory;
+        return productCategory;
     }
 
     public void setProductCategory(CategoryResponse productCategory) {
@@ -102,48 +103,50 @@ public class ProductResponse {
     }
 
     public UserResponse getCreatedBy() {
-        return this.createdBy;
+        return createdBy;
     }
 
     public void setCreatedBy(UserResponse createdBy) {
         this.createdBy = createdBy;
     }
 
+    public UserResponse getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(UserResponse updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     public StatusResponse getProductStatus() {
-        return this.productStatus;
+        return productStatus;
     }
 
     public void setProductStatus(StatusResponse productStatus) {
         this.productStatus = productStatus;
     }
 
-    public WorkflowResponse getWorkflow() {
-        return this.workflow;
-    }
-    public void setWorkflow(WorkflowResponse workflow) {
-        this.workflow = workflow;
-    }
-
     public LocalDateTime getCreatedAt() {
-        return this.createdAt;
+        return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public UserResponse getUpdatedBy() {
-        return this.updatedBy;
-    }
-    public void setUpdatedBy(UserResponse updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     public LocalDateTime getUpdatedAt() {
-        return this.updatedAt;
+        return updatedAt;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public WorkflowResponse getWorkflow() {
+        return workflow;
+    }
+
+    public void setWorkflow(WorkflowResponse workflow) {
+        this.workflow = workflow;
     }
 }

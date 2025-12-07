@@ -1,4 +1,4 @@
-package com.plm.poelman.java_api.models.dto.UserRoles;
+package com.plm.poelman.java_api.models.dto.userRoles;
 
 public class UserRoleResponse {
     private Long id;
