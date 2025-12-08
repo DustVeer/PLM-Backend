@@ -103,8 +103,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password fields are required");
         }
 
-        System.out.println("Updating password for user id: " + id);
-
         Optional<User> existing = _userService.findById(id);
         if (existing.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");

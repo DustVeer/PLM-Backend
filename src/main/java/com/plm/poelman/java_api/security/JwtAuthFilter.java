@@ -43,32 +43,22 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String header = req.getHeader(HttpHeaders.AUTHORIZATION);
 
-        System.out.println("[JWT] start uri=" + req.getRequestURI());
-        System.out.println("[JWT] authHeader=" + header);
         if (StringUtils.hasText(header) && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-            System.out.println("token: " + token);
             try {
                 Jws<Claims> jws = jwtService.parse(token);
                 Claims claims = jws.getPayload();
-                System.out.println("[JWT] parsed sub=" + claims.getSubject() + " aud=" + claims.get("aud") + " iss="
-                        + claims.getIssuer());
 
                 var authorities = extractAuthorities(claims);
                 var auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
-                System.out.println("[JWT] set auth principal=" + auth.getPrincipal());
             } catch (Exception ex) {
                 SecurityContextHolder.clearContext();
                 System.err.println("JWT invalid: " + ex.getClass().getSimpleName() + " - " + ex.getMessage());
             }
         }
-        System.out.println("[JWT] before chain, auth=" +
-                (SecurityContextHolder.getContext().getAuthentication() == null ? "null" : "set"));
         chain.doFilter(req, res);
-
-        System.out.println("[JWT] after chain, status=" + res.getStatus());
     }
 
     private List<GrantedAuthority> extractAuthorities(Claims c) {

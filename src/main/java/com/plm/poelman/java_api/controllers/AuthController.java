@@ -31,16 +31,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
-
-        System.out.println("Temp Hash + salt for dveerdonk@gmail.com" + _passwordUtils.generateSalt().toString() + "  " +  _passwordUtils.hash("admin".toCharArray(), _passwordUtils.generateSalt()).toString());
-
-
         if (req == null || req.getEmail() == null || req.getPassword() == null) {
             return ResponseEntity.badRequest().body("email and password are required");
         }
 
-        System.out.println("email=" + req.getEmail());
-        System.out.println("password=" + req.getPassword());
 
         var userOpt = UserService.Login(req);
 
@@ -48,11 +42,6 @@ public class AuthController {
             return ResponseEntity.status(401).body("invalid email or password");
         }
         User user = userOpt.get();
-
-        System.out.println("user logged in ID: " + user.getEmail());
-
-        System.err.println("user logged in Role: " + user.getRole().getName());
-        System.err.println("user logged in Email: " + user.getEmail());
 
         var roleName = user.getRole().getName();
 

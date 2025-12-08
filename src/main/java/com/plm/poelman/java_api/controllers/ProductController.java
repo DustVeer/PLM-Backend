@@ -58,8 +58,6 @@ public class ProductController {
         req.setCreatedAt(now);
         req.setUpdatedAt(now);
 
-        System.out.println("Creating product with name: " + req.getName());
-
         ProductResponse dto = _productService.createProduct(req);
 
         return ResponseEntity.ok(dto);

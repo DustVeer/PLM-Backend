@@ -25,8 +25,6 @@ public class CategoryController {
         @RequestParam(defaultValue = "1") int page,
         @RequestParam(defaultValue = "20") int pageSize) {
 
-        System.out.println("Searching categories with searchString: " + searchString + ", page: " + page + ", pageSize: " + pageSize);
-        
         CategorySearchResponse results = _categoryService.searchCategoriesByName(searchString, page, pageSize);
 
         if(results.getItems() == null || results.getItems().isEmpty()) {

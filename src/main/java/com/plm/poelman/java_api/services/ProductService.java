@@ -99,7 +99,6 @@ public class ProductService {
         product.setCreatedBy(createdBy);
         product.setUpdatedBy(createdBy);
 
-        System.out.println("Creating Product: " + product.getName() + ", CreatedBy: " + createdBy.getName());
 
         Product created = _productRepository.save(product);
 
@@ -112,11 +111,6 @@ public class ProductService {
     }
 
     public ProductResponse updateProduct(Long id, CreateUpdateProductRequest req) {
-
-        System.out.println("productId      = " + id);
-        System.out.println("categoryId     = " + req.getCategoryId());
-        System.out.println("statusId       = " + req.getStatusId());
-        System.out.println("updatedById    = " + req.getUpdatedById());
 
         Product existingProduct = _productRepository.findById(id).orElse(null);
 
@@ -138,8 +132,6 @@ public class ProductService {
         _productRepository.save(product);
         ProductResponse dto = this.getProductById(id);
 
-        System.out.println("Updated Product: " + dto.getName() + ", Description: " + dto.getDescription()
-                + ", UpdatedAt: " + dto.getCreatedAt());
 
         return dto;
     }

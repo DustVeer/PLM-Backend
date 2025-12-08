@@ -78,7 +78,6 @@ public class WorkflowService {
             return null;
         }
 
-        System.out.println("Req statuses:" + req.getStatuses());
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -165,8 +164,6 @@ public class WorkflowService {
         if (workflow == null) {
             return null;
         }
-
-        System.out.println("Toggling active status for workflow with ID: " + id);
 
         workflow.setIsActive(workflow.getIsActive() == 0 ? 1 : 0);
         Workflow savedWorkflow = _workflowRepository.save(workflow);

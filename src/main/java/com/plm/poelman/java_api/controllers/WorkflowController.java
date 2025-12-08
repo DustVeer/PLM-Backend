@@ -71,7 +71,6 @@ public class WorkflowController {
 
     @PutMapping("/{id}/toggle-active")
     public ResponseEntity<?> toggleActive(@PathVariable Long id) {
-        System.out.println("Toggling active status for workflow with ID: " + id);
         WorkflowResponse workflowToToggleActive = _workflowService.toggleActiveById(id);
         if (workflowToToggleActive == null) {
             return ResponseEntity.status(400).body("Failed to toggle active status");
