@@ -31,6 +31,7 @@ public class UserService {
     }
 
     public Optional<User> findById(Long id) {
+        System.out.println("Temp Hash + salt for dveerdonk@gmail.com" + _passwordUtils.generateSalt().toString() + "  " +  _passwordUtils.hash("admin".toCharArray(), _passwordUtils.generateSalt()).toString());
         return _userRepository.findById(id);
     }
 
@@ -108,5 +109,7 @@ public class UserService {
 
         return Optional.of(user);
     }
+
+
 
 }

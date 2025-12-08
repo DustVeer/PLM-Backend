@@ -20,7 +20,6 @@ import com.plm.poelman.java_api.models.dto.users.CreateUserRequest;
 import com.plm.poelman.java_api.models.dto.users.UpdateUserPasswordRequest;
 import com.plm.poelman.java_api.models.dto.users.UpdateUserRequest;
 import com.plm.poelman.java_api.models.dto.users.UserResponse;
-
 import com.plm.poelman.java_api.services.UserService;
 
 @RestController
@@ -28,6 +27,7 @@ import com.plm.poelman.java_api.services.UserService;
 public class UserController {
 
     private final UserService _userService;
+
 
     public UserController(UserService userService) {
         this._userService = userService;
@@ -119,8 +119,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+
 
         return _userService.findById(id).stream().map(u -> new UserResponse(u))
                 .map(ResponseEntity::ok)
